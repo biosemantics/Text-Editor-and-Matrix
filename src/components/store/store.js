@@ -9,7 +9,7 @@ export const store = new Vuex.Store({
 		logged_in: null,
 		auth_id: -1,
 
-		tab_list: [],				// tab list
+		tab_list: ['Species 1'],				// tab list
 
 		item_list: [],												// item list for data table
 
@@ -18,13 +18,13 @@ export const store = new Vuex.Store({
 		text_array: [],			// text data for each tabs
 
 		item_index_list: {},										// list of item names for inex
-		
+
 		ontology_index_list: {},									// list of ontology names for inex
 
 		active_tab: 0,												// index of active tab
 
 		table_highlights: [],										// list of highlights in table
-		
+
 		editor_highlights: []										// list of highlights in editor
 	}
 });
