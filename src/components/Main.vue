@@ -59,7 +59,7 @@
                 </v-list>
               </v-menu>
             </div>
-            
+
             <v-snackbar
               :timeout="3000"
               :top="true"
@@ -345,7 +345,7 @@ export default {
         var index = textContent.search(key);
         if ( index != -1) {
           this.editor.formatText(index, key.length, "bold", true);
-          
+
           if (this.$store.state.ontology_index_list[key].ontology != null) {
             if (this.$store.state.ontology_index_list[key].ontology.matching_value == 1) {
               this.editor.formatText(index, key.length, "color", "lightgreen");
@@ -353,7 +353,7 @@ export default {
           }
         }
       }
-      
+
       for(var key in this.$store.state.item_ontology_info_list) {
         var characterOntologyInfo = this.$store.state.item_ontology_info_list[key];
         if (characterOntologyInfo.hasOwnProperty(this.$store.state.tab_list[this.$store.state.active_tab])) {
@@ -433,12 +433,12 @@ export default {
         if(snapshot.exists()) {
           self.$store.state.tab_list = JSON.parse(snapshot.val().data);
         }
-      });      
+      });
       firebase.database().ref("users/" + firebase.auth().currentUser.uid + '/item_list').on('value',function(snapshot) {
         if(snapshot.exists()) {
           self.$store.state.item_list = JSON.parse(snapshot.val().data);
         }
-      });      
+      });
       firebase.database().ref("users/" + firebase.auth().currentUser.uid + '/item_ontology_info_list').on('value',function(snapshot) {
         if(snapshot.exists()) {
           self.$store.state.item_ontology_info_list = JSON.parse(snapshot.val().data);
@@ -509,9 +509,9 @@ export default {
           this.searchMenu.posX = e.clientX
           this.searchMenu.posY = e.clientY
           this.$nextTick(() => {
-            this.searchMenu.show = true            
+            this.searchMenu.show = true
             this.$http.get('http://shark.sbs.arizona.edu:8080/CAREX/search?term='+encodeURI(this.searchMenu.search_term)).then(response => {
-              
+
               this.logActivity(6,'Term:'+this.searchMenu.search_term, 'Tab name:'+this.$store.state.tab_list[this.$store.state.active_tab]);
               //console.log(response);
               this.searchMenu.searching_icon = false;
@@ -521,7 +521,7 @@ export default {
               result.resultAnnotations.forEach(val => {
                 this.searchMenu.menuItem.push({title:val.value});
               })
-              
+
             });
           });
       } else {
@@ -544,12 +544,12 @@ export default {
             }
           }
           else {
-            // search info in character list this.$store.state.item_ontology_info_list[item_string][this.$store.state.tab_list[this.$store.state.active_tab]] 
+            // search info in character list this.$store.state.item_ontology_info_list[item_string][this.$store.state.tab_list[this.$store.state.active_tab]]
             for(var key in this.$store.state.item_ontology_info_list) {
               var characterInfo = this.$store.state.item_ontology_info_list[key];
               if(characterInfo.hasOwnProperty(this.$store.state.tab_list[this.$store.state.active_tab])) {
                 if(characterInfo[this.$store.state.tab_list[this.$store.state.active_tab]].search_term == term) {
-                  var matchingInfo = characterInfo[this.$store.state.tab_list[this.$store.state.active_tab]];            
+                  var matchingInfo = characterInfo[this.$store.state.tab_list[this.$store.state.active_tab]];
                   this.approveMenu.menuItem = [];
                   this.approveMenu.menuItem = [
                     {title: "Search Term:" + matchingInfo.search_term},
