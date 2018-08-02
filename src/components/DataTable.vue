@@ -1,3 +1,8 @@
+<style>
+table tr td:first-child {
+  color: rgba(0,0,0,.54);
+}
+</style>
 <template>
   <v-data-table
     :headers="headers_array"
@@ -8,7 +13,7 @@
      id="table_viewID"
   >
     <template slot="items" slot-scope="props">
-      <td contenteditable="true" v-for="(key) in headers_array" :key="key.value" class="text-xs-left" v-on:click="highlight_text" v-on:keyup="keyup_event(props.item[key.value])">
+      <td style="height:25px" contenteditable="true" v-for="(key) in headers_array" :key="key.value" class="text-xs-left" v-on:click="highlight_text" v-on:keyup="keyup_event(props.item[key.value])">
         <v-tooltip bottom>
           <span slot="activator">{{ props.item[key.value] }}</span>
         <span>{{ props.item[key.value] }}</span>
@@ -17,9 +22,9 @@
 
     </template>
     <template slot="no-data">
-      <v-alert :value="true" color="error" icon="warning">
-        Sorry, nothing to display here :(
-      </v-alert>
+      <p style="color:gray;font-size:16px;font-style:italic;padding-top:16px;">
+        Matricized data will appear here
+      </p>
     </template>
   </v-data-table>
 </template>
@@ -33,21 +38,30 @@ export default {
           text: "Hello World!",
           headers_array: [],
           item_array: [],
+          highlightedWord: ''
         }
     },
     methods: {
       refreshTable () {
         var header = [{text:"Name",value:"name",sortable:false}];
-        this.$store.state.tab_list.forEach(val => {
-            var data = {
-                text: val,
-                value: val,
-                sortable: false,
-            };
-            header.push(data);
-        });
+        if (this.$store.state.tab_list.length == 1 && (this.$store.state.tab_list[0] == "Double Click to change Name" || this.$store.state.tab_list[0] == "ENTER Taxon name to start"))
+        {
+          console.log("exception in theader");
+        }
+        else {
+          this.$store.state.tab_list.forEach(val => {
+              var data = {
+                  text: val.toUpperCase(),
+                  value: val,
+                  sortable: false,
+              };
+              header.push(data);
+          });
+
+        }
         this.headers_array = header;
         this.item_array = this.$store.state.item_list;
+        //console.log(this.item_array);
       },
 
       highlight_word(searchText) {
@@ -66,6 +80,7 @@ export default {
       },
 
       erase_highlight() {
+        this.highlightedWord = '';
         this.$store.state.table_highlights.forEach(cell => {
           cell.firstChild.firstChild.innerHTML = cell.firstChild.firstChild.innerText;
         })
@@ -84,15 +99,16 @@ export default {
 
       highlight_text (event) {
         event.preventDefault();
-        
-        if(window.getSelection().toString() == "")
-        {
-          return;
+
+        if(window.getSelection().toString() == "") {
+            return;
         }
         var str = this.GetWordByPos(window.getSelection().anchorNode.textContent, window.getSelection().focusOffset);
         this.erase_highlight();
         this.highlight_word(str);
+        this.highlightedWord = str;
         this.$parent.highlight_word(str);
+
       },
 
       GetWordByPos(str, pos) {
@@ -107,6 +123,9 @@ export default {
 
       keyup_event (origin_text) {
         //console.log(window.getSelection());
+        if (window.getSelection().focusNode.tagName == "TD") {
+          return;
+        }
         if(window.getSelection().focusNode.parentNode.className.includes("highlight")) {
           var new_text = window.getSelection().focusNode.parentNode.parentNode.textContent;
           if (new_text != origin_text) {
