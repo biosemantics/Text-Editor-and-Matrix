@@ -6,6 +6,10 @@ npm install
 
 2. Running the development server in local environment
 npm start
+The project must be running on
+http://localhost:8080
+http://127.0.0.1:8080
+You can test in your local environment.
 
 3. Building the project and Deployment
 - npm run build
